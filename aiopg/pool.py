@@ -1,7 +1,7 @@
 import asyncio
 import collections
 
-
+import psycopg2
 from psycopg2.extensions import TRANSACTION_STATUS_IDLE
 
 from .connection import connect, TIMEOUT
