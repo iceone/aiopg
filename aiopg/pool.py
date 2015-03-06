@@ -306,8 +306,15 @@ class _CursorContextManager:
     def __exit__(self, *args):
         try:
             self._cur._impl.close()
+        except psycopg2.Error as e:
+            logger.warning(
+                "Error happened while closing cursor. Dropping connection. Error: %s",
+                str(e))
+            self._conn.close()
+        finally:
+            self._cur = None
+        try:
             self._pool.release(self._conn)
         finally:
             self._pool = None
             self._conn = None
-            self._cur = None
